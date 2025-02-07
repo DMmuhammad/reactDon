@@ -1,60 +1,22 @@
-// import Header from "./components/Header/Header";
-// import Maincontent from "./components/Maincontent/Maincontent";
-// import Footer from "./components/Footer/Footer";
-import {useState} from "react";
-import Header from "./Header";
-import {useDispatch, useSelector} from "react-redux";
+import {Route, Routes} from "react-router-dom";
+import HomePage from "./pages/HomePage/Home";
+import TitlePage from "./pages/TitlePage/TitlePage";
+import NotFound from "./pages/NotFound/NotFound";
+import Layout from "./components/Layout/Layout";
+import AboutPage from "./pages/About";
 
 function App() {
-  const [text, setText] = useState("");
-  const dispatch = useDispatch();
-  const todos = useSelector((state) => state);
-  console.log(todos);
-
-  const handleRemove = (id) => {
-    dispatch({
-      type: "DELETE",
-      payload: id,
-    });
-  };
-
-  const handleChange = (e) => {
-    setText(e.target.value);
-  };
-
-  const addTask = (e) => {
-    e.preventDefault();
-    let newTodo = {
-      text: text,
-      complited: false,
-    };
-
-    setText("");
-
-    dispatch({
-      type: "ADD",
-      payload: newTodo,
-    });
-  };
-
   return (
-    <form onSubmit={addTask} className="container mx-auto ">
-      {todos.map((todo) => {
-        return (
-          <div key={todo.id} className="flex items-center justify-between gap-3 mb-4">
-            <input type="checkbox" defaultChecked={todo.complited} />
-            <p>{todo.text}</p>
-            <button onClick={() => handleRemove(todo.id)} className="ml-auto border-2 border-red-500 px-2 py-1 rounded-2xl">
-              X
-            </button>
-          </div>
-        );
-      })}
-      <div className="flex items-center justify-between">
-        <input value={text} onChange={(e) => handleChange(e)} type="text" className="w-full py-2 px-4 border-gray-300 border-2" />
-        <button className="ml-auto border-2 border-sky-500 px-2 py-1 rounded-2xl text-sky-500">ADD</button>
-      </div>
-    </form>
+    <div className="">
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<HomePage />} index />
+          <Route path="/title" element={<TitlePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </div>
   );
 }
 
