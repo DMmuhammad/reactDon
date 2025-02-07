@@ -6,41 +6,55 @@ import Header from "./Header";
 import {useDispatch, useSelector} from "react-redux";
 
 function App() {
+  const [text, setText] = useState("");
   const dispatch = useDispatch();
-  const number = useSelector((state) => state);
-  const plus = () => {
+  const todos = useSelector((state) => state);
+  console.log(todos);
+
+  const handleRemove = (id) => {
     dispatch({
-      type: "PLUS",
+      type: "DELETE",
+      payload: id,
     });
   };
 
-  const minus = () => {
-    dispatch({
-      type: "MINUS",
-    });
+  const handleChange = (e) => {
+    setText(e.target.value);
   };
 
-  const refresh = () => {
+  const addTask = (e) => {
+    e.preventDefault();
+    let newTodo = {
+      text: text,
+      complited: false,
+    };
+
+    setText("");
+
     dispatch({
-      type: "REFRESH",
+      type: "ADD",
+      payload: newTodo,
     });
   };
 
   return (
-    <div className="container mx-auto flex items-center flex-col mt-10">
-      <h1 className="text-4xl mb-10">{number}</h1>
-      <div className="flex items-center gap-5 text-center">
-        <button onClick={plus} className="border-4 border-indigo-500  bg-indigo-500 text-white text-4xl py-2 px-4">
-          +
-        </button>
-        <button onClick={refresh} className="border-4 border-indigo-500 bg-indigo-500 text-white text-4xl py-2 px-4">
-          =
-        </button>
-        <button onClick={minus} className="border-4 border-indigo-500 bg-indigo-500 text-white text-4xl py-2 px-4">
-          -
-        </button>
+    <form onSubmit={addTask} className="container mx-auto ">
+      {todos.map((todo) => {
+        return (
+          <div key={todo.id} className="flex items-center justify-between gap-3 mb-4">
+            <input type="checkbox" defaultChecked={todo.complited} />
+            <p>{todo.text}</p>
+            <button onClick={() => handleRemove(todo.id)} className="ml-auto border-2 border-red-500 px-2 py-1 rounded-2xl">
+              X
+            </button>
+          </div>
+        );
+      })}
+      <div className="flex items-center justify-between">
+        <input value={text} onChange={(e) => handleChange(e)} type="text" className="w-full py-2 px-4 border-gray-300 border-2" />
+        <button className="ml-auto border-2 border-sky-500 px-2 py-1 rounded-2xl text-sky-500">ADD</button>
       </div>
-    </div>
+    </form>
   );
 }
 

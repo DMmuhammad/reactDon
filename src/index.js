@@ -5,20 +5,29 @@ import App from "./App.jsx";
 import {createStore} from "redux";
 import {Provider} from "react-redux";
 
-const initialState = 0;
+const initialState = [
+  {
+    id: 1,
+    text: "React",
+    complited: false,
+  },
+  {
+    id: 2,
+    text: "JavaScript",
+    complited: false,
+  },
+];
+
 const reducer = (state = initialState, action) => {
-  if (action.type === "PLUS") {
-    return state + 1;
+  switch (action.type) {
+    case "DELETE":
+      return state.filter((item) => item.id !== action.payload);
+    case "ADD":
+      return [...state, action.payload];
+
+    default:
+      return state;
   }
-  if (action.type === "MINUS") {
-    if (state > 0) {
-      return state - 1;
-    }
-  }
-  if (action.type === "REFRESH") {
-    return (state = 0);
-  }
-  return state;
 };
 const store = createStore(reducer);
 
